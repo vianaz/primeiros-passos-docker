@@ -4,7 +4,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "start:dotenv": "dotenv -e .env node src/index.js"
   },
   "dependencies": {
     "dotenv-cli": "^7.4.2",
