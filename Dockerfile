@@ -1,15 +1,17 @@
-FROM node:20 
+FROM node:20-slim 
+RUN corepack enable
 
 WORKDIR /app
 
-COPY package.json .
-COPY pnpm-lock.yaml .
+COPY package.json pnpm-lock.yaml ./
+
 
 RUN npm install -g pnpm
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 COPY src ./
 
 EXPOSE 4000 
 
-CMD ["pnpm start:dotenv ", "start:dotenv"]
+ENTRYPOINT ["pnpm"]
+CMD ["start:dotenv"]
