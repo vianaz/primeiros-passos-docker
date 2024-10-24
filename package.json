@@ -8,11 +8,13 @@
     "start:dotenv": "dotenv -e .env node src/index.js"
   },
   "dependencies": {
-    "dotenv-cli": "^7.4.2",
     "express": "^4.21.1",
     "joi": "^17.13.3",
     "pg": "^8.13.0",
     "pino": "^9.5.0",
     "pino-pretty": "^11.3.0"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.4.2"
   }
 }
