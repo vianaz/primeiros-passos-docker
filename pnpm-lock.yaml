@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      dotenv-cli:
-        specifier: ^7.4.2
-        version: 7.4.2
       express:
         specifier: ^4.21.1
         version: 4.21.1
@@ -26,6 +23,10 @@ importers:
       pino-pretty:
         specifier: ^11.3.0
         version: 11.3.0
+    devDependencies:
+      dotenv-cli:
+        specifier: ^7.4.2
+        version: 7.4.2
 
 packages:
 

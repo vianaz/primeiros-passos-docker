@@ -12,11 +12,11 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   const { rows } = await db.query('SELECT * FROM users WHERE id = $1', [id]);
-  
+
   if (rows.length === 0) {
     res.status(404);
     return res.send('User not found');
-  }     
+  }
 
   return res.send(rows[0]);
 })
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
   });
 
   const { error } = validationSchema.validate(req.body);
-  
+
   if (error) {
     res.status(422);
     res.send(error.details[0].message);
