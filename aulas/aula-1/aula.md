@@ -1,5 +1,9 @@
 # Aula 1
 
+## Syntax dos comandos Docker
+
+WIP
+
 ## Criando a primeira imagem
 
 ### Buildando a imagem
@@ -64,3 +68,91 @@ Para "settar" nossas variáveis de ambiente existem duas maneiras:
 Iremos de comando `2.`, ao usar ele rodando `docker container run --env-file .env primeiros-passos-docker:v1`, **voilà**, funcionando:
 
 ![alt text](image-1.png)
+
+### Melhorando nossa imagem
+
+Como foi falando em [buildando a imagem](#buildando-a-imagem), nossa imagem está meio grande, em vários cloud providers temos um limite de free tier sendo 500mb, já iriamos passar disso na nossa primeira imagem (fora o fato de quantidade de dados trafegados na rede se a imagem é maior, o que gera custos e pipipopo...), portanto é importante fazermos otimizações na imagem.
+
+A primeira e mais trivial é usar uma imagem `alpine`, mas o que diabos é `alpine`? Em resumo é uma versão/distro de linux super leve, como o próprio site deles sugere:
+
+![alt text](image-2.png)
+
+Nosso `Dockerfile` ficam assim:
+
+```Docker
+ARG NODE_VERSION=22-alpine # Alterado aqui
+
+# syntax=docker/dockerfile:experimental
+FROM node:${NODE_VERSION}
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+
+COPY . .
+
+ENTRYPOINT ["pnpm"]
+CMD ["start"]
+```
+
+Ao trocarmos para `alpine` nossa imagem fica em:
+
+![alt text](image-3.png)
+
+Saimos de `1.65GB` para `266MB`, uma melhoria fantastica!!! 🎉🎉🎉
+
+> **Nota**: Outra melhoria possível é usar `Multi Stage Build`, mas nesse caso não teremos uma melhoria muito grande, porque não temos um processo de build, então não vou apresentar no momento, mas no futuro podemos retornar nesse cara.
+
+Além disso, por questão de seguranção, não rodar nosso container como `root`, é importante fazer nossa imagem usar um usuário, por padrão as imagens `node` criam o usuário `node`, com menos privilégio, então bastante mudarmos nossa imagem para:
+
+```Docker
+ARG NODE_VERSION=22-alpine
+
+# syntax=docker/dockerfile:experimental
+FROM node:${NODE_VERSION}
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+
+COPY . .
+
+USER node # Alteramos aqui
+
+ENTRYPOINT ["pnpm"]
+CMD ["start"]
+```
+
+## Rodando nosso banco localmente
+
+### Tentando rodar apontando para o localhost
+
+WIP
+
+### Explicado um pouco sobre isolamento de network de um container
+
+WIP
+
+### Tentando conectar com o banco localmente mais uma vez
+
+WIP
+
+### Criando nossa primeira network
+
+WIP
+
+### Conectando com nossa network
+
+WIP
+
+## Criando documentação/pipeline para tudo
