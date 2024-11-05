@@ -5,8 +5,9 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
 
-
 RUN pnpm install --frozen-lockfile
+
+WORKDIR /app/src
 
 COPY src ./
 
