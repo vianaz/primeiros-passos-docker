@@ -14,4 +14,4 @@ COPY src ./
 EXPOSE 4000 
 
 ENTRYPOINT ["pnpm"]
-CMD ["start:dotenv"]
+CMD ["start"]
